@@ -1,4 +1,4 @@
-$c->{'irstat2_filter_ipcidr_blocks'}={
+$c->{'irstats2_filter_ipcidr_blocks'}={
 	# use a single ip or ip/cidr or ip/netmask or ip range ip_start-ip_end
 	# See EPrints::Plugin::Stats::Filter::IP
 	ranges=>[

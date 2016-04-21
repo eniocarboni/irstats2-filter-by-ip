@@ -12,7 +12,7 @@ sub new
         my $self = $class->SUPER::new( %params );
 
         $self->{disable} = 0;
-	$self->{'conf'}=$self->repository->get_conf('irstat2_filter_ipcidr_blocks') || {};
+	$self->{'conf'}=$self->repository->get_conf('irstats2_filter_ipcidr_blocks') || {};
 	$self->{'debug'}= exists $self->{'conf'}->{'debug'} ? $self->{'conf'}->{'debug'} : 0;
         return $self;
 }
@@ -25,7 +25,7 @@ sub filter_record {
 	$found=0;
 	unless (exists $self->{'ranges'}) {
 		$self->ipcidrblocksToRanges();
-		print STDERR "[Stats::Filter::IP::new()] range ip calcolati: ".join (",",@{$self->{'ranges'}})."\n" if $self->{'debug'};
+		print STDERR "[Stats::Filter::IP::filter_record] range ip calcolati: ".join (",",@{$self->{'ranges'}})."\n" if $self->{'debug'};
 	}
 	foreach $iprange (@{$self->{'ranges'}} ) {
 		($ip_start,$ip_end)=split(/-/,$iprange);
@@ -49,7 +49,7 @@ sub _ipcmp {
     my (@ip1_el,@ip2_el);
     @ip1_el=split (/\./, $ip1);
     @ip2_el=split (/\./, $ip2);
-    print STDERR "[Stats::Filter::IP::_ipcmp()] Different number of octets in IP addresses\n" if  ($#ip1_el != $#ip2_el) && $self->{'debug'};
+    print STDERR "[Stats::Filter::IP::_ipcmp] Different number of octets in IP addresses\n" if  ($#ip1_el != $#ip2_el) && $self->{'debug'};
     while ($#ip1_el >= 0 && $ip1_el[0] == $ip2_el[0]) {
 	shift @ip1_el;
 	shift @ip2_el;
@@ -113,14 +113,14 @@ sub ipcidrblocksToRanges {
 		$prev_octet = 255;
 		foreach my $octet (split/\./, $cidr_or_netmask) {
 			if($prev_octet != 255 && $octet != 0) {
-				print STDERR "[Stats::Filter::IP::ipcidrblocksToRanges()] Invalid number $octet (must be 0) in netmask $cidr_or_netmask in $cidr\n" if $self->{'debug'};
+				print STDERR "[Stats::Filter::IP::ipcidrblocksToRanges] Invalid number $octet (must be 0) in netmask $cidr_or_netmask in $cidr\n" if $self->{'debug'};
 				$cidr=-1; last;
 			}
 			$prev_octet = $octet;
 			while ($octet > 0) {
 				# check first right bit that must be 1 in netmask
 				if (($octet & 128) == 0) { # 128 = 1000 0000
-					print STDERR "[Stats::Filter::IP::ipcidrblocksToRanges()] Invalid number $prev_octet in netmask [$cidr_or_netmask]\n" if $self->{'debug'};
+					print STDERR "[Stats::Filter::IP::ipcidrblocksToRanges] Invalid number $prev_octet in netmask [$cidr_or_netmask]\n" if $self->{'debug'};
 					$cidr=-1; last;
 				}
 				$octet=($octet << 1) & 255; # shift bit right than AND with 255 to take only 8 bit
@@ -134,7 +134,7 @@ sub ipcidrblocksToRanges {
 	@ips= split (/\.+/, $ip);
 	for( $i = $#ips + 1 ; $i < 4 ; $i++ ) { $ips[$i] = 0; }
 	grep {
-		print STDERR "[Stats::Filter::IP::ipcidrblocksToRanges()] $_, in $ip, is not valid [use value in range 0-255]\n" if ($_ < 0 || $_ > 255 || $_ !~ /^[0-9]+$/) && $self->{'debug'};
+		print STDERR "[Stats::Filter::IP::ipcidrblocksToRanges] $_, in $ip, is not valid [use value in range 0-255]\n" if ($_ < 0 || $_ > 255 || $_ !~ /^[0-9]+$/) && $self->{'debug'};
 	} @ips;
 	if ($cidr < 0 || $cidr > (($#ips+1) * 8) || $cidr !~ /^[0-9]+$/ ) {
 		print STDERR "$cidr, as in '$cidrs', does not make sense\n" if $self->{'debug'};
