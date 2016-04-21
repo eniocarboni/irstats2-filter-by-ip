@@ -12,6 +12,7 @@ the ip logged is in a range configured in cfg/cfg.d/z_irstat2_filter_ipcidr_bloc
 This module should put offline the many GB of log table access of the software eprints.
 
 To install:
+
  cp cfg/cfg.d/z_irstats2_filter_ipcidr_blocks.pl $EPRINTS_HOME/archives/<id>/cfg/cfg.d/z_irstat2_filter_ipcidr_blocks.pl
  cp cfg/plugins/EPrints/Plugin/Stats/Filter/IP.pm $EPRINTS_HOME/archives/<id>/cfg/plugins/EPrints/Plugin/Stats/Filter/IP.pm
 
