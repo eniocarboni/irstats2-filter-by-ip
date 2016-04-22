@@ -33,6 +33,7 @@ sub filter_record {
 		next if $self->_ipcmp($ip_end, $ip)  < 0;
 		$found=1; last;
 	}
+	print STDERR "[Stats::Filter::IP::filter_record] found ip $ip in accessid=$record->{accessid}\n" if $found && $self->{'debug'};
 	return $found;
 }
 
