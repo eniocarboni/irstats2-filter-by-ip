@@ -9,7 +9,6 @@ B<irstats2-filter-by-ip> - Filter module for Irstats2 to filter accesslog by ip/
 
 This module is an extension for Irstats2 (see https://github.com/eprints/irstats2/) to filter accesslog if 
 the ip logged is in a range configured in cfg/cfg.d/z_irstat2_filter_ipcidr_blocks.pl
-This module should put offline the many GB of log table access of the software eprints.
 
 To install:
 
